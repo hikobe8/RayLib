@@ -14,8 +14,7 @@ public class LoadingViewManager {
 
      public static LoadingViewController register(Context context) {
          if (context instanceof Activity) {
-             ViewGroup viewGroup = ((Activity) context).findViewById(android.R.id.content);
-             return new LoadingViewController(viewGroup);
+             return new LoadingViewController(context);
          } else {
              throw new RuntimeException("can't support other Context type except Activity");
          }

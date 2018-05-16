@@ -1,9 +1,11 @@
 package com.ray.lib.loading;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.FrameLayout;
 
 import com.ray.lib.R;
@@ -15,19 +17,24 @@ import com.ray.lib.R;
  */
 public class LoadingViewController {
 
+    private ViewGroup mLoadingMainLayout;
+
     private View mTargetView;
+
+    private View mLoadingLayout, mEmptyLayout, mErrorLayout;
 
     /**
      * for activity use
-     * @param parentView
+     * @param context
      */
-    public LoadingViewController(ViewGroup parentView) {
-        View loadingMainLayout = getLoadingMainLayout(parentView.getContext());
+    public LoadingViewController(Context context) {
+        ViewGroup parentView = ((Activity) context).findViewById(android.R.id.content);
+        View loadingMainLayout = getLoadingMainLayout(context);
         parentView.addView(loadingMainLayout);
     }
 
     public LoadingViewController(View targetView) {
-        ViewGroup loadingMainLayout = getLoadingMainLayout(targetView.getContext());
+        mLoadingMainLayout = getLoadingMainLayout(targetView.getContext());
         ViewGroup parentLayout = (ViewGroup) targetView.getParent();
         ViewGroup.LayoutParams layoutParams = targetView.getLayoutParams();
         FrameLayout.LayoutParams layoutParams1 = new FrameLayout.LayoutParams(layoutParams);
@@ -37,8 +44,8 @@ public class LoadingViewController {
         layoutParams1.rightMargin = 0;
         int index = parentLayout.indexOfChild(targetView);
         parentLayout.removeView(targetView);
-        loadingMainLayout.addView(targetView, 0, layoutParams1);
-        parentLayout.addView(loadingMainLayout, index, layoutParams);
+        mLoadingMainLayout.addView(targetView, 0, layoutParams1);
+        parentLayout.addView(mLoadingMainLayout, index, layoutParams);
         mTargetView = targetView;
     }
 
@@ -48,15 +55,42 @@ public class LoadingViewController {
 
 
     public void switchLoading() {
-
+        if (mLoadingMainLayout != null && mLoadingLayout == null) {
+           ViewStub viewStub = mLoadingMainLayout.findViewById(R.id.vs_loading);
+           mLoadingLayout = viewStub.inflate();
+        }
+        internalHideView(mEmptyLayout);
+        internalHideView(mErrorLayout);
+        mLoadingLayout.setVisibility(View.VISIBLE);
     }
 
     public void switchEmpty() {
+
+        if (mLoadingMainLayout != null && mEmptyLayout == null) {
+            ViewStub viewStub = mLoadingMainLayout.findViewById(R.id.vs_empty);
+            mEmptyLayout = viewStub.inflate();
+        }
+        internalHideView(mLoadingLayout);
+        internalHideView(mErrorLayout);
+        mEmptyLayout.setVisibility(View.VISIBLE);
 
     }
 
     public void switchError() {
 
+        if (mLoadingMainLayout != null && mErrorLayout == null) {
+            ViewStub viewStub = mLoadingMainLayout.findViewById(R.id.vs_error);
+            mLoadingLayout = viewStub.inflate();
+        }
+        internalHideView(mLoadingLayout);
+        internalHideView(mEmptyLayout);
+        mErrorLayout.setVisibility(View.VISIBLE);
+
+    }
+
+    private void internalHideView(View view) {
+        if (view != null)
+            view.setVisibility(View.INVISIBLE);
     }
 
 }

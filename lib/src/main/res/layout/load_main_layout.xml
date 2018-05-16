@@ -4,15 +4,22 @@
     android:background="#fff"
     android:layout_height="match_parent">
 
-    <ProgressBar
+    <ViewStub
+        android:id="@+id/vs_loading"
+        android:layout="@layout/loading_view_loading_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_height="wrap_content" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <ViewStub
+        android:id="@+id/vs_empty"
+        android:layout="@layout/loading_view_empty_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="没有数据"/>
+        android:layout_height="wrap_content" />
+
+    <ViewStub
+        android:id="@+id/vs_error"
+        android:layout="@layout/loading_view_error_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </FrameLayout>
