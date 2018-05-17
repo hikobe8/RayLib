@@ -80,7 +80,7 @@ public class LoadingViewController {
 
         if (mLoadingMainLayout != null && mErrorLayout == null) {
             ViewStub viewStub = mLoadingMainLayout.findViewById(R.id.vs_error);
-            mLoadingLayout = viewStub.inflate();
+            mErrorLayout = viewStub.inflate();
         }
         internalHideView(mLoadingLayout);
         internalHideView(mEmptyLayout);

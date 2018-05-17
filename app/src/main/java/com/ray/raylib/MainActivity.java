@@ -14,13 +14,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        View view = findViewById(R.id.test_layout);
+        final View view = findViewById(R.id.test_layout);
         final LoadingViewController register = LoadingViewManager.register(view);
         register.switchLoading();
-        new Handler().postDelayed(new Runnable() {
+        view.postDelayed(new Runnable() {
             @Override
             public void run() {
                 register.switchEmpty();
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        register.switchLoading();
+                        view.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                register.switchError();
+                            }
+                        }, 2000);
+                    }
+                }, 1000);
             }
         }, 2000);
     }
