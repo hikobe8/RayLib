@@ -25,15 +25,19 @@ public class LoadingViewController {
 
     /**
      * for activity use
+     *
      * @param context
      */
     public LoadingViewController(Context context) {
+
         ViewGroup parentView = ((Activity) context).findViewById(android.R.id.content);
-        View loadingMainLayout = getLoadingMainLayout(context);
-        parentView.addView(loadingMainLayout);
+        mLoadingMainLayout = getLoadingMainLayout(context);
+        parentView.addView(mLoadingMainLayout);
+
     }
 
     public LoadingViewController(View targetView) {
+
         mLoadingMainLayout = getLoadingMainLayout(targetView.getContext());
         ViewGroup parentLayout = (ViewGroup) targetView.getParent();
         ViewGroup.LayoutParams layoutParams = targetView.getLayoutParams();
@@ -47,21 +51,27 @@ public class LoadingViewController {
         mLoadingMainLayout.addView(targetView, 0, layoutParams1);
         parentLayout.addView(mLoadingMainLayout, index, layoutParams);
         mTargetView = targetView;
+
     }
 
     private ViewGroup getLoadingMainLayout(Context context) {
+
         return (ViewGroup) LayoutInflater.from(context).inflate(R.layout.load_main_layout, null, false);
+
     }
 
 
     public void switchLoading() {
+
         if (mLoadingMainLayout != null && mLoadingLayout == null) {
-           ViewStub viewStub = mLoadingMainLayout.findViewById(R.id.vs_loading);
-           mLoadingLayout = viewStub.inflate();
+            ViewStub viewStub = mLoadingMainLayout.findViewById(R.id.vs_loading);
+            mLoadingLayout = viewStub.inflate();
         }
+        internalHideView(mTargetView);
         internalHideView(mEmptyLayout);
         internalHideView(mErrorLayout);
         mLoadingLayout.setVisibility(View.VISIBLE);
+
     }
 
     public void switchEmpty() {
@@ -70,6 +80,7 @@ public class LoadingViewController {
             ViewStub viewStub = mLoadingMainLayout.findViewById(R.id.vs_empty);
             mEmptyLayout = viewStub.inflate();
         }
+        internalHideView(mTargetView);
         internalHideView(mLoadingLayout);
         internalHideView(mErrorLayout);
         mEmptyLayout.setVisibility(View.VISIBLE);
@@ -82,15 +93,26 @@ public class LoadingViewController {
             ViewStub viewStub = mLoadingMainLayout.findViewById(R.id.vs_error);
             mErrorLayout = viewStub.inflate();
         }
+        internalHideView(mTargetView);
         internalHideView(mLoadingLayout);
         internalHideView(mEmptyLayout);
         mErrorLayout.setVisibility(View.VISIBLE);
 
     }
 
+    public void switchSuccess() {
+
+        internalHideView(mLoadingMainLayout);
+        if (mTargetView != null)
+            mTargetView.setVisibility(View.VISIBLE);
+
+    }
+
     private void internalHideView(View view) {
+
         if (view != null)
             view.setVisibility(View.INVISIBLE);
+
     }
 
 }
