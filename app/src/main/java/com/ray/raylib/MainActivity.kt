@@ -1,11 +1,8 @@
 package com.ray.raylib
 
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-
-import com.ray.lib.loading.LoadingViewController
 import com.ray.lib.loading.LoadingViewManager
 
 class MainActivity : AppCompatActivity() {

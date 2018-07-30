@@ -8,6 +8,7 @@
 
     <FrameLayout
         android:id="@+id/test_layout"
+        android:background="#123456"
         android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="300dp"/>

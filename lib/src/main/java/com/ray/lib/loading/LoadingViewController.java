@@ -102,7 +102,9 @@ public class LoadingViewController {
 
     public void switchSuccess() {
 
-        internalHideView(mLoadingMainLayout);
+        internalHideView(mLoadingLayout);
+        internalHideView(mEmptyLayout);
+        internalHideView(mErrorLayout);
         if (mTargetView != null)
             mTargetView.setVisibility(View.VISIBLE);
 
