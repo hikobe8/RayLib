@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
+import com.ray.lib.loadmore_recyclerview.LoadMoreAdapter;
 import com.ray.lib.loadmore_recyclerview.LoadMoreRecyclerView;
 import com.ray.lib.loadmore_recyclerview.LoadingMoreType;
 import com.ray.raylib.R;
@@ -58,6 +59,23 @@ public class LoadMoreRecyclerActivity extends AppCompatActivity {
                 loadMoreData();
             }
         });
+        mMyLoadMoreAdapter.setOnLoadInErrorStateListener(new LoadMoreAdapter.OnLoadInErrorStateListener() {
+            @Override
+            public void onLoadInErrorState() {
+                mMyLoadMoreAdapter.setFooterState(LoadingMoreType.TYPE_LOADING);
+                mMyLoadMoreAdapter.setCanLoadMore(true);
+                mRecyclerView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!mMyLoadMoreAdapter.isCanLoadMore())
+                            return;
+                        final List<String> data = createData();
+                        mMyLoadMoreAdapter.addData(data);
+                    }
+                }, 800);
+            }
+
+        });
     }
 
     private void loadMoreData() {
@@ -69,7 +87,11 @@ public class LoadMoreRecyclerActivity extends AppCompatActivity {
                     return;
                 final List<String> data = createData();
                 mMyLoadMoreAdapter.addData(data);
-                if (mPage >= 6) {
+                if (mPage == 6) {
+                    mMyLoadMoreAdapter.setFooterState(LoadingMoreType.TYPE_ERROR);
+                    mMyLoadMoreAdapter.setCanLoadMore(false);
+                }
+                if (mPage >= 8) {
                     mMyLoadMoreAdapter.setFooterState(LoadingMoreType.TYPE_LAST);
                     mMyLoadMoreAdapter.setCanLoadMore(false);
                 }

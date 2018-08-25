@@ -30,6 +30,16 @@ public abstract class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.
         mCanLoadMore = canLoadMore;
     }
 
+    public interface OnLoadInErrorStateListener{
+        void onLoadInErrorState();
+    }
+
+    private OnLoadInErrorStateListener mOnLoadInErrorStateListener;
+
+    public void setOnLoadInErrorStateListener(OnLoadInErrorStateListener onLoadInErrorStateListener) {
+        mOnLoadInErrorStateListener = onLoadInErrorStateListener;
+    }
+
     public void setFooterState(int footerState) {
         if (mLoadingHolder != null) {
             mLoadingHolder.switchState(footerState);
@@ -52,6 +62,11 @@ public abstract class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (position < getNormalItemCount()) {
             onBindNormalViewHolder(holder, position);
+        } else {
+            if (holder instanceof LoadingHolder) {
+                LoadingHolder loadingHolder = (LoadingHolder) holder;
+                loadingHolder.setOnLoadInErrorStateListener(mOnLoadInErrorStateListener);
+            }
         }
     }
 
@@ -78,13 +93,25 @@ public abstract class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.
         private View mLoadingView;
         private View mLastView;
         private View mErrorView;
+        private OnLoadInErrorStateListener mOnLoadInErrorStateListener;
 
+        public void setOnLoadInErrorStateListener(OnLoadInErrorStateListener onLoadInErrorStateListener) {
+            mOnLoadInErrorStateListener = onLoadInErrorStateListener;
+        }
 
         public LoadingHolder(View itemView) {
             super(itemView);
             mLoadingView = itemView.findViewById(R.id.layout_loading);
             mLastView = itemView.findViewById(R.id.layout_last);
             mErrorView = itemView.findViewById(R.id.layout_error);
+            mErrorView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnLoadInErrorStateListener != null) {
+                        mOnLoadInErrorStateListener.onLoadInErrorState();
+                    }
+                }
+            });
         }
 
         public void switchState(@LoadingMoreType int state) {
