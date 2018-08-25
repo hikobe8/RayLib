@@ -44,9 +44,7 @@ public class LoadMoreRecyclerView extends RecyclerView{
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) getLayoutManager();
                 LoadMoreAdapter adapter = (LoadMoreAdapter) getAdapter();
                 int lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItemPosition == adapter.getNormalItemCount() && adapter.isCanLoadMore()) {
-                    if (adapter.isCanLoadMore())
-                        adapter.setFooterState(LoadingMoreType.TYPE_LOADING);
+                if (lastVisibleItemPosition == adapter.getNormalItemCount() && adapter.isLoaded()) {
                     if (mOnLoadMoreListener != null) {
                         mOnLoadMoreListener.onLoadMore();
                     }

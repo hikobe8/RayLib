@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.ray.lib.loadmore_recyclerview.LoadMoreAdapter;
 import com.ray.lib.loadmore_recyclerview.LoadMoreRecyclerView;
-import com.ray.lib.loadmore_recyclerview.LoadingMoreType;
 import com.ray.raylib.R;
 
 import java.util.ArrayList;
@@ -38,13 +37,13 @@ public class LoadMoreRecyclerActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mMyLoadMoreAdapter.setCanLoadMore(false);
+                mMyLoadMoreAdapter.setDataRefreshing();
                 if (swipeRefreshLayout != null) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
                 mPage = 1;
                 mMyLoadMoreAdapter.refreshData(createData());
-                mMyLoadMoreAdapter.setCanLoadMore(true);
+                mMyLoadMoreAdapter.setDataLoaded();
             }
         });
         mRecyclerView = findViewById(R.id.recycler);
@@ -62,15 +61,13 @@ public class LoadMoreRecyclerActivity extends AppCompatActivity {
         mMyLoadMoreAdapter.setOnLoadInErrorStateListener(new LoadMoreAdapter.OnLoadInErrorStateListener() {
             @Override
             public void onLoadInErrorState() {
-                mMyLoadMoreAdapter.setFooterState(LoadingMoreType.TYPE_LOADING);
-                mMyLoadMoreAdapter.setCanLoadMore(true);
+                mMyLoadMoreAdapter.setDataLoading();
                 mRecyclerView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (!mMyLoadMoreAdapter.isCanLoadMore())
-                            return;
                         final List<String> data = createData();
                         mMyLoadMoreAdapter.addData(data);
+                        mMyLoadMoreAdapter.setDataLoaded();
                     }
                 }, 800);
             }
@@ -80,20 +77,18 @@ public class LoadMoreRecyclerActivity extends AppCompatActivity {
 
     private void loadMoreData() {
         Log.e("test", "load more");
+        mMyLoadMoreAdapter.setDataLoading();
         mRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!mMyLoadMoreAdapter.isCanLoadMore())
-                    return;
                 final List<String> data = createData();
                 mMyLoadMoreAdapter.addData(data);
-                if (mPage == 6) {
-                    mMyLoadMoreAdapter.setFooterState(LoadingMoreType.TYPE_ERROR);
-                    mMyLoadMoreAdapter.setCanLoadMore(false);
+                mMyLoadMoreAdapter.setDataLoaded();
+                if (mPage == 4) {
+                    mMyLoadMoreAdapter.setDataLoadError();
                 }
-                if (mPage >= 8) {
-                    mMyLoadMoreAdapter.setFooterState(LoadingMoreType.TYPE_LAST);
-                    mMyLoadMoreAdapter.setCanLoadMore(false);
+                if (mPage >= 6) {
+                    mMyLoadMoreAdapter.setLastPage();
                 }
 
             }
