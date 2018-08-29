@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ray.lib.loadmore_recyclerview.LoadingMoreType;
 import com.ray.raylib.R;
 
 import java.util.ArrayList;
@@ -27,17 +26,16 @@ public class MyLoadMoreAdapter extends com.ray.lib.loadmore_recyclerview.LoadMor
         mList.clear();
         mList.addAll(list);
         notifyDataSetChanged();
-//        setFooterState(LoadingMoreType.TYPE_LOADING);
     }
 
     public void addData(List<String> list){
-        final int preStartIndex = getItemCount();
+        final int preStartIndex = getNormalItemCount();
         mList.addAll(list);
         notifyItemRangeInserted(preStartIndex, list.size());
     }
 
     @Override
-    protected RecyclerView.ViewHolder onCreateNormalViewHolder(@NonNull ViewGroup parent) {
+    protected RecyclerView.ViewHolder onCreateNormalViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new MyHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false));
     }
 
@@ -48,7 +46,7 @@ public class MyLoadMoreAdapter extends com.ray.lib.loadmore_recyclerview.LoadMor
     }
 
     @Override
-    protected int getNormalItemCount() {
+    public int getNormalItemCount() {
         return mList.size();
     }
 

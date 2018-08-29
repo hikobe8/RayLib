@@ -15,6 +15,7 @@ import com.ray.lib.R;
  */
 public abstract class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+
     private static final int TYPE_FOOTER = 0;
     private static final int TYPE_NORMAL = 1;
 
@@ -24,9 +25,11 @@ public abstract class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.
     public static final int STATE_LOAD_ERROR = 4;
     public static final int STATE_REFRESH = 5;
 
+    private int mLoadState = STATE_LOADED;
     private LoadingHolder mLoadingHolder;
 
-    private int mLoadState = STATE_LOADED;
+    //脚部加载栏状态
+    private int mFooterState = LoadingMoreType.TYPE_LOADING;
 
     public int getLoadState() {
         return mLoadState;
@@ -64,7 +67,11 @@ public abstract class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.
         return mLoadState == STATE_LOADED;
     }
 
-    public interface OnLoadInErrorStateListener{
+    public boolean isRefreshing() {
+        return mLoadState == STATE_REFRESH;
+    }
+
+    public interface OnLoadInErrorStateListener {
         void onLoadInErrorState();
     }
 
@@ -75,31 +82,35 @@ public abstract class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public void setFooterState(int footerState) {
+        mFooterState = footerState;
         if (mLoadingHolder != null) {
             mLoadingHolder.switchState(footerState);
+            return;
         }
+        notifyItemChanged(getNormalItemCount());
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == TYPE_NORMAL) {
-            return onCreateNormalViewHolder(parent);
+    public final RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == TYPE_FOOTER) {
+            mLoadingHolder = new LoadingHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_loading_item, parent, false));
+            mLoadingHolder.setOnLoadInErrorStateListener(mOnLoadInErrorStateListener);
+            return mLoadingHolder;
         }
-        mLoadingHolder = new LoadingHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.load_more_loading_item, parent, false));
-        return mLoadingHolder;
+        return onCreateNormalViewHolder(parent, viewType);
     }
 
-    protected abstract RecyclerView.ViewHolder onCreateNormalViewHolder(@NonNull ViewGroup parent);
+    protected abstract RecyclerView.ViewHolder onCreateNormalViewHolder(@NonNull ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public final void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (position < getNormalItemCount()) {
             onBindNormalViewHolder(holder, position);
         } else {
             if (holder instanceof LoadingHolder) {
                 LoadingHolder loadingHolder = (LoadingHolder) holder;
-                loadingHolder.setOnLoadInErrorStateListener(mOnLoadInErrorStateListener);
+                loadingHolder.switchState(mFooterState);
             }
         }
     }
@@ -107,18 +118,22 @@ public abstract class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.
     protected abstract void onBindNormalViewHolder(RecyclerView.ViewHolder holder, int position);
 
     @Override
-    public int getItemCount() {
+    public final int getItemCount() {
         return getNormalItemCount() == 0 ? 0 : getNormalItemCount() + 1;
     }
 
-    protected abstract int getNormalItemCount();
+    public abstract int getNormalItemCount();
 
     @Override
-    public int getItemViewType(int position) {
+    public final int getItemViewType(int position) {
         int normalItemCount = getNormalItemCount();
         if (position == normalItemCount) {
             return TYPE_FOOTER;
         }
+        return getNormalItemViewType(position);
+    }
+
+    protected int getNormalItemViewType(int position) {
         return TYPE_NORMAL;
     }
 
@@ -141,6 +156,8 @@ public abstract class LoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.
             mErrorView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (mErrorView.getVisibility() != View.VISIBLE)
+                        return;
                     if (mOnLoadInErrorStateListener != null) {
                         mOnLoadInErrorStateListener.onLoadInErrorState();
                     }
