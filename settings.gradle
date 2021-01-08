@@ -1,2 +1,3 @@
+include ':JavaUtil'
 include ':app', ':lib', ':retrofitnetwork'
 include ':rayimageloader'

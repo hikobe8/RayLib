@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndroidStudioProjects-RayLib.iml" filepath="$PROJECT_DIR$/AndroidStudioProjects-RayLib.iml" group="RayLib" />
-      <module fileurl="file://$PROJECT_DIR$/RayLib.iml" filepath="$PROJECT_DIR$/RayLib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/RayLib-app.iml" filepath="$PROJECT_DIR$/app/RayLib-app.iml" group="RayLib/app" />
-      <module fileurl="file://$PROJECT_DIR$/lib/RayLib-lib.iml" filepath="$PROJECT_DIR$/lib/RayLib-lib.iml" group="RayLib/lib" />
-      <module fileurl="file://$PROJECT_DIR$/retrofitnetwork/RayLib-retrofitnetwork.iml" filepath="$PROJECT_DIR$/retrofitnetwork/RayLib-retrofitnetwork.iml" group="RayLib/retrofitnetwork" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/rayimageloader/rayimageloader.iml" filepath="$PROJECT_DIR$/rayimageloader/rayimageloader.iml" group="RayLib/rayimageloader" />
-      <module fileurl="file://$PROJECT_DIR$/retrofitnetwork/retrofitnetwork.iml" filepath="$PROJECT_DIR$/retrofitnetwork/retrofitnetwork.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/RayLib.iml" filepath="$PROJECT_DIR$/.idea/modules/RayLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JavaUtil/RayLib.JavaUtil.iml" filepath="$PROJECT_DIR$/.idea/modules/JavaUtil/RayLib.JavaUtil.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/RayLib.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/RayLib.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lib/RayLib.lib.iml" filepath="$PROJECT_DIR$/.idea/modules/lib/RayLib.lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rayimageloader/RayLib.rayimageloader.iml" filepath="$PROJECT_DIR$/.idea/modules/rayimageloader/RayLib.rayimageloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/retrofitnetwork/RayLib.retrofitnetwork.iml" filepath="$PROJECT_DIR$/.idea/modules/retrofitnetwork/RayLib.retrofitnetwork.iml" />
     </modules>
   </component>
 </project>
