@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.LruCache
 import android.widget.ImageView
+import java.io.File
+import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executors
@@ -19,6 +21,8 @@ class ImageLoader {
 
     private val mImageCache = ImageCache()
 
+    private val mDiskCache = DiskCache()
+
     fun displayImage(url: String, imageView: ImageView) {
         val cache = mImageCache.get(url)
         if (cache != null) {
@@ -27,13 +31,16 @@ class ImageLoader {
         }
         imageView.tag = url
         mExecutor.submit(Runnable {
-            val bitmap = downloadImage(url) ?: return@Runnable
+            var bitmap = mDiskCache.get(url)
+            if (bitmap == null)
+                bitmap = downloadImage(url) ?: return@Runnable
             if (imageView.tag == url) {
                 imageView.post {
                     imageView.setImageBitmap(bitmap)
                 }
             }
             mImageCache.put(url, bitmap)
+            mDiskCache.put(url, bitmap)
         })
     }
 
@@ -71,4 +78,18 @@ class ImageCache {
         mImageCache.put(url, bitmap)
     }
 
+}
+
+class DiskCache {
+
+    fun get(url: String) = BitmapFactory.decodeFile(RayApp.APP.cacheDir.absolutePath + File.separator + url.hashCode())
+
+    fun put(url: String, bitmap: Bitmap) {
+        File(RayApp.APP.cacheDir, url.hashCode().toString()).apply {
+            if (!exists()) {
+                createNewFile()
+            }
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(this))
+        }
+    }
 }
