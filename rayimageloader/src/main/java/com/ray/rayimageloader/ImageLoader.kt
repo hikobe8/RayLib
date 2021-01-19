@@ -19,19 +19,20 @@ class ImageLoader {
 
     private val mExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
 
-    private val mImageCache = ImageCache()
-
-    private val mDiskCache = DiskCache()
+    /**
+     * 默认使用双缓存
+     */
+    var imageCache:ImageCache = DoubleCache()
 
     fun displayImage(url: String, imageView: ImageView) {
-        val cache = mImageCache.get(url)
+        val cache = imageCache.get(url)
         if (cache != null) {
             imageView.setImageBitmap(cache)
             return
         }
         imageView.tag = url
         mExecutor.submit(Runnable {
-            var bitmap = mDiskCache.get(url)
+            var bitmap = imageCache.get(url)
             if (bitmap == null)
                 bitmap = downloadImage(url) ?: return@Runnable
             if (imageView.tag == url) {
@@ -39,12 +40,11 @@ class ImageLoader {
                     imageView.setImageBitmap(bitmap)
                 }
             }
-            mImageCache.put(url, bitmap)
-            mDiskCache.put(url, bitmap)
+            imageCache.put(url, bitmap)
         })
     }
 
-    fun downloadImage(url: String): Bitmap? {
+    private fun downloadImage(url: String): Bitmap? {
         val conn = URL(url).openConnection() as HttpURLConnection
         val bitmap = BitmapFactory.decodeStream(conn.inputStream)
         conn.disconnect()
@@ -53,7 +53,12 @@ class ImageLoader {
 
 }
 
-class ImageCache {
+interface ImageCache {
+    fun get(url: String): Bitmap?
+    fun put(url: String, bitmap: Bitmap)
+}
+
+class MemoryCache : ImageCache {
 
     private lateinit var mImageCache: LruCache<String, Bitmap>
 
@@ -72,19 +77,19 @@ class ImageCache {
         }
     }
 
-    fun get(url: String): Bitmap? = mImageCache.get(url)
+    override fun get(url: String): Bitmap? = mImageCache.get(url)
 
-    fun put(url: String, bitmap: Bitmap) {
+    override fun put(url: String, bitmap: Bitmap) {
         mImageCache.put(url, bitmap)
     }
 
 }
 
-class DiskCache {
+class DiskCache : ImageCache {
 
-    fun get(url: String) = BitmapFactory.decodeFile(RayApp.APP.cacheDir.absolutePath + File.separator + url.hashCode())
+    override fun get(url: String) = BitmapFactory.decodeFile(RayApp.APP.cacheDir.absolutePath + File.separator + url.hashCode())
 
-    fun put(url: String, bitmap: Bitmap) {
+    override fun put(url: String, bitmap: Bitmap) {
         File(RayApp.APP.cacheDir, url.hashCode().toString()).apply {
             if (!exists()) {
                 createNewFile()
@@ -93,3 +98,27 @@ class DiskCache {
         }
     }
 }
+
+class DoubleCache : ImageCache {
+
+    private val memoryCache = MemoryCache()
+
+    private val diskCache = DiskCache()
+
+    override fun get(url: String): Bitmap? {
+        var bitmap = memoryCache.get(url)
+        if (bitmap == null) {
+            bitmap = diskCache.get(url)
+        }
+        return bitmap
+    }
+
+    override fun put(url: String, bitmap: Bitmap) {
+        memoryCache.put(url, bitmap)
+        diskCache.put(url, bitmap)
+    }
+
+}
+
+
+
