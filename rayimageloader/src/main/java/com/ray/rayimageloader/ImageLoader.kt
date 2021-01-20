@@ -15,7 +15,7 @@ import java.util.concurrent.Executors
  * Time : 2020/8/31 6:02 PM
  * Description :
  */
-class ImageLoader {
+object ImageLoader {
 
     private val mExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
 
