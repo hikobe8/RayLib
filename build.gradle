@@ -26,3 +26,107 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+//基本输出
+println("Hello,Gradle")
+//基本类型
+int a = 2
+def b = 3
+
+//5
+println a + b
+
+char c = 97
+//a
+println(c)
+
+//数组
+def arr = [1, 2, 3]
+arr.add(4)
+println(arr)
+
+//方法
+def hello() {
+    println("这是hello方法的打印")
+}
+
+hello()
+
+//流程控制
+
+//条件
+def printMax(a, b) {
+    if (a > b) {
+        println("$a, $b max = $a")
+    } else {
+        println("$a, $b max = $b")
+    }
+}
+//2, 3 max = 3
+printMax(2, 3)
+
+for (int i = 0; i < 5; i++) {
+    println(i)
+}
+
+def nums = [1, 2, 3, 4]
+nums.each {
+    println(it)
+}
+
+def closure = {
+    println("闭包打印:$it")
+}
+
+closure("你好，闭包")
+
+//模拟Android Plugin 编写DSL
+def android = {
+    compileSdkVersion 28
+    defaultConfig {
+        versionName "1.0"
+    }
+}
+
+def androidObject = new Android()
+android.setDelegate(androidObject)
+android.call()
+println(androidObject)
+
+class DefaultConfig {
+    String versionName
+
+    def versionName(versionName) {
+        this.versionName = versionName
+    }
+
+
+    @Override
+    String toString() {
+        return "DefaultConfig{" +
+                "versionName='" + versionName + '\'' +
+                '}';
+    }
+}
+
+class Android {
+    int compileSdkVersion;
+    DefaultConfig defaultConfig
+
+    def compileSdkVersion(version) {
+        this.compileSdkVersion = version
+    }
+
+    def defaultConfig(Closure<DefaultConfig> closure){
+        this.defaultConfig = new DefaultConfig()
+        closure.setDelegate(this.defaultConfig)
+        closure()
+    }
+
+    @Override
+    String toString() {
+        return "Android{" +
+                "compileSdkVersion=" + compileSdkVersion +
+                ", defaultConfig=" + defaultConfig +
+                '}';
+    }
+}
