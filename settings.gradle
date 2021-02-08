@@ -1,3 +1,27 @@
 include ':JavaUtil'
 include ':app', ':lib', ':retrofitnetwork'
 include ':rayimageloader'
+
+println("当前工程目录 : ${rootProject.projectDir}")
+
+gradle.addBuildListener(new BuildAdapter(){
+
+    @Override
+    void settingsEvaluated(Settings settings) {
+        super.settingsEvaluated(settings)
+        println("初始化结束")
+    }
+
+    @Override
+    void projectsEvaluated(Gradle gradle) {
+        super.projectsEvaluated(gradle)
+        println("配置结束")
+    }
+
+    @Override
+    void buildFinished(BuildResult result) {
+        super.buildFinished(result)
+        println("构建完成")
+    }
+
+})
