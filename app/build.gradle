@@ -34,3 +34,16 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+task testTask(){
+    doLast {
+        println("自定义任务 testTask")
+    }
+}
+
+task test2(){
+    dependsOn(testTask)
+    doLast {
+        println("自定义任务 test2")
+    }
+}
