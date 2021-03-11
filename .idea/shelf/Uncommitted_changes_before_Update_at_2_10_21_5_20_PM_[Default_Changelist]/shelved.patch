@@ -1,0 +1,36 @@
+Index: settings.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>include ':JavaUtil'\ninclude ':app', ':lib', ':retrofitnetwork'\ninclude ':rayimageloader'\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- settings.gradle	(revision fd68859bbe7a02d14bb688a07cc016d43ce40c79)
++++ settings.gradle	(date 1612780343000)
+@@ -1,3 +1,25 @@
+ include ':JavaUtil'
+ include ':app', ':lib', ':retrofitnetwork'
+ include ':rayimageloader'
++
++
++gradle.addBuildListener(new BuildAdapter(){
++
++    @Override
++    void settingsEvaluated(Settings settings) {
++        super.settingsEvaluated(settings)
++        println("初始化阶段完成")
++    }
++
++    @Override
++    void projectsEvaluated(Gradle gradle) {
++        super.projectsEvaluated(gradle)
++        println("配置阶段完成")
++    }
++
++    @Override
++    void buildFinished(BuildResult result) {
++        super.buildFinished(result)
++        println("构建结束")
++    }
++})
+\ No newline at end of file

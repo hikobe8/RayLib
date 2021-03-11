@@ -35,15 +35,17 @@ repositories {
     mavenCentral()
 }
 
-task testTask(){
+task testTask() {
     doLast {
         println("自定义任务 testTask")
     }
 }
 
-task test2(){
+task test2() {
     dependsOn(testTask)
     doLast {
         println("自定义任务 test2")
     }
 }
+
+apply from: rootProject.file("other.gradle")
