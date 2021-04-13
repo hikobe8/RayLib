@@ -1,3 +1,4 @@
+include ':routerdemo'
 include ':learnaspectj'
 include ':JavaUtil'
 include ':app', ':lib', ':retrofitnetwork'
