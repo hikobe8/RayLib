@@ -1,7 +1,12 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'com.ray.router'
+}
+
+apply plugin: 'com.ray.router'
+
+router {
+    wikiDir getProjectDir().absolutePath
 }
 
 android {
