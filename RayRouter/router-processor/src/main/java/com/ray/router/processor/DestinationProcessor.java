@@ -1,15 +1,19 @@
 package com.ray.router.processor;
 
+import com.google.auto.service.AutoService;
 import com.ray.router.annotations.Destination;
 
 import java.util.Collections;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 
+@AutoService(Processor.class)
 public class DestinationProcessor extends AbstractProcessor {
 
     private final static String TAG = "DestinationProcessor";
@@ -23,9 +27,13 @@ public class DestinationProcessor extends AbstractProcessor {
      */
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+        if (roundEnvironment.processingOver()) {
+            //避免多次调用
+            return false;
+        }
         System.out.println(TAG + " >>>> process start...");
-        Set<Element> allDestinationElements =
-                (Set<Element>) roundEnvironment.getElementsAnnotatedWith(Destination.class);
+        Set<? extends Element> allDestinationElements =
+                roundEnvironment.getElementsAnnotatedWith(Destination.class);
         System.out.println(TAG + " >>>> all Destination Elements count = " + allDestinationElements.size());
         if (allDestinationElements.size() < 1) {
             return false;
@@ -56,5 +64,10 @@ public class DestinationProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return Collections.singleton(Destination.class.getCanonicalName());
+    }
+
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.RELEASE_8;
     }
 }
