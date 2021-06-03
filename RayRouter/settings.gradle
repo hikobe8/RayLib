@@ -1,4 +1,4 @@
-include ':app', ':router-gradle-plugin'
+include ':app'
 rootProject.name = "RayRouter"
 include(':router-annotations')
 include(':router-processor')

@@ -7,7 +7,13 @@ class RouterPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        println "this is from RouterPlugin apply, project = ${project.name}"
+
+        if (project.extensions.findByName("kapt") != null) {
+            project.extensions.findByName("kapt").arguments {
+                arg('root-project-dir', project.rootProject.projectDir.absolutePath)
+            }
+        }
+
         project.getExtensions().create("router", RouterExtension)
         project.afterEvaluate {
             RouterExtension extension = project["router"]

@@ -38,12 +38,6 @@ android {
         jvmTarget = '1.8'
     }
 
-    kapt{
-        arguments{
-            arg("root-project-dir", rootProject.projectDir.absolutePath)
-        }
-    }
-
 }
 
 dependencies {
