@@ -2,3 +2,7 @@ include ':app'
 rootProject.name = "RayRouter"
 include(':router-annotations')
 include(':router-processor')
+
+gradle.taskGraph.beforeTask { task ->
+    println("[all-task] -> ${task.name}")
+}
