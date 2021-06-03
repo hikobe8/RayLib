@@ -1,10 +1,9 @@
 plugins {
     id 'com.android.application'
+    id 'com.ray.router'
     id 'kotlin-android'
     id 'kotlin-kapt'
 }
-
-apply plugin: 'com.ray.router'
 
 router {
     wikiDir getProjectDir().absolutePath
@@ -15,7 +14,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.ray.rayrouter"
+        applicationId "com.ray.rayrouterdemo"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
@@ -30,32 +29,28 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    kapt {
+        arguments {
+            arg('root_project_dir', rootProject.projectDir.absolutePath)
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    kapt{
-        arguments{
-            arg("root-project-dir", rootProject.projectDir.absolutePath)
-        }
-    }
-
 }
 
 dependencies {
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation project(':router-annotations')
-    kapt (project(':router-processor'))
+    implementation 'com.ray.router:router-annotations:1.0.0'
+    kapt 'com.ray.router:router-processor:1.0.0'
 }

@@ -1,8 +1,16 @@
 package com.ray.router.processor;
 
 import com.google.auto.service.AutoService;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.ray.router.annotations.Destination;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.Set;
@@ -41,6 +49,9 @@ public class DestinationProcessor extends AbstractProcessor {
             return false;
         }
 
+        String rootDir = processingEnv.getOptions().get("root-project-dir");
+
+
         StringBuilder stringBuilder = new StringBuilder();
         String mappingClassName = "RouterMapping_" + System.currentTimeMillis();
         stringBuilder.append("package com.ray.rayrouter.mapping;").append("\n\n");
@@ -53,6 +64,8 @@ public class DestinationProcessor extends AbstractProcessor {
         stringBuilder.append("    public static Map<String, String> get() {").append("\n");
         stringBuilder.append("        Map<String, String> mapping = new HashMap<>();").append("\n");
 
+        final JsonArray destinationJsonArray = new JsonArray();
+
         for (Element destinationElement : allDestinationElements) {
             TypeElement typeElement = (TypeElement) destinationElement;
             Destination annotation = typeElement.getAnnotation(Destination.class);
@@ -63,13 +76,19 @@ public class DestinationProcessor extends AbstractProcessor {
             String description = annotation.description();
             String realPath = typeElement.getQualifiedName().toString();
             stringBuilder.append("        mapping.put(\"")
-                    .append(url).append("t\",\"")
+                    .append(url).append("\",\"")
                     .append(realPath)
                     .append("\");")
                     .append("\n");
             System.out.println(TAG + " >>>> url = " + url);
             System.out.println(TAG + " >>>> description = " + description);
             System.out.println(TAG + " >>>> realPath = " + realPath);
+
+            JsonObject item = new JsonObject();
+            item.addProperty("url", url);
+            item.addProperty("realPath", realPath);
+            item.addProperty("description", description);
+            destinationJsonArray.add(item);
         }
 
         stringBuilder.append("        return mapping;").append("\n");
@@ -84,8 +103,28 @@ public class DestinationProcessor extends AbstractProcessor {
             writer.flush();
             writer.close();
         } catch (Exception e) {
-            throw new RuntimeException("Error while create router mapping file", e);
+            throw new RuntimeException("Error while creating router mapping file", e);
         }
+
+
+        try {
+            File rootFile = new File(rootDir);
+            if (!rootFile.exists()) {
+                throw new RuntimeException("root-project-dir doesn't exists");
+            }
+            File docDir = new File(rootDir, "router_mapping");
+            if (!docDir.exists()) {
+                docDir.mkdir();
+            }
+            File docFile = new File(docDir, "router_mapping_" + System.currentTimeMillis() + ".json");
+            BufferedWriter outWriter = new BufferedWriter(new FileWriter(docFile));
+            outWriter.write(destinationJsonArray.toString());
+            outWriter.flush();
+            outWriter.close();
+        } catch (Exception e) {
+            throw new RuntimeException("Error while create router mapping doc file", e);
+        }
+
         System.out.println(TAG + " >>>> process end.");
         System.out.println(stringBuilder.toString());
         return false;
