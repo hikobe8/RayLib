@@ -1,5 +1,7 @@
 package com.ray.router.gradle
 
+import com.android.build.gradle.AppExtension
+import com.android.build.gradle.AppPlugin
 import groovy.json.JsonSlurper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -8,6 +10,12 @@ class RouterPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+
+        //注册RouterMappingTransform
+        if (project.plugins.hasPlugin(AppPlugin)) {
+            AppExtension appExtension = project.extensions.getByType(AppExtension)
+            appExtension.registerTransform(new RouterMappingTransform())
+        }
 
         if (project.extensions.findByName("kapt") != null) {
             project.extensions.findByName("kapt").arguments {

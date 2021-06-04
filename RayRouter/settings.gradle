@@ -1,3 +1,4 @@
+include ':biz-reading'
 include ':app'
 rootProject.name = "RayRouter"
 include(':router-annotations')
