@@ -20,11 +20,6 @@
         <module name="RayRouter.router-processor" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
-      <module name="RayRouter.app" target="11" />
-      <module name="RayRouter.biz-reading" target="11" />
-      <module name="RayRouter.buildSrc" target="11" />
-      <module name="RayRouter.router-processor" target="11" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8" />
   </component>
 </project>
