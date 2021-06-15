@@ -8,6 +8,9 @@ import com.android.build.api.transform.TransformInvocation
 import com.android.build.gradle.internal.pipeline.TransformManager
 import com.android.utils.FileUtils
 
+import java.util.jar.JarOutputStream
+import java.util.zip.ZipEntry
+
 class RouterMappingTransform extends Transform {
 
     @Override
@@ -57,6 +60,27 @@ class RouterMappingTransform extends Transform {
                 collector.collectJar(dirInput.file)
             }
         }
-        println("RouterMappingClasses = ${collector.routerMappings}")
+        println("${getName()} RouterMappingClasses = ${collector.routerMappings}")
+        File mappingJarFile = transformInvocation.outputProvider.getContentLocation(
+                "router_mapping",
+                getOutputTypes(),
+                getScopes(),
+                Format.JAR
+        )
+        if (!mappingJarFile.getParentFile().exists()) {
+            mappingJarFile.getParentFile().mkdirs()
+        }
+        if (mappingJarFile.exists()) {
+            mappingJarFile.delete()
+        }
+        println("${getName()} mappingJarFile = $mappingJarFile.absolutePath")
+        FileOutputStream fos = new FileOutputStream(mappingJarFile)
+        JarOutputStream jos = new JarOutputStream(fos)
+        ZipEntry zipEntry = new ZipEntry(RouterMappingBytecodeBuilder.CLASS_NAME + ".class")
+        jos.putNextEntry(zipEntry)
+        jos.write(RouterMappingBytecodeBuilder.get(collector.routerMappings))
+        jos.closeEntry()
+        jos.close()
+        fos.close()
     }
 }
