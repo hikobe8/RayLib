@@ -1,3 +1,4 @@
+include ':router-runtime'
 include ':biz-reading'
 include ':app'
 rootProject.name = "RayRouter"

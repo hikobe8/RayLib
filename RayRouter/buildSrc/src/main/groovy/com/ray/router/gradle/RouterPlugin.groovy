@@ -25,17 +25,21 @@ class RouterPlugin implements Plugin<Project> {
 
         //执行clean 任务的时候清除上一次生成的router mapping目录的所有文件
         project.clean.doFirst {
-            File routerMappingDir = new File(project.rootProject.projectDir, "router_mapping")
-            if (routerMappingDir.exists()) {
-                routerMappingDir.deleteDir()
-            }
+            deleteGeneratedJsonFiles(project)
         }
 
         project.getExtensions().create("router", RouterExtension)
         project.afterEvaluate {
             RouterExtension extension = project["router"]
             println("用户配置的wiki目录为：${extension.wikiDir}")
-
+            //assemble*
+            project.tasks.findAll { task ->
+                task.name.startsWith('assemble')
+            }.each { task ->
+                task.doLast {
+                    deleteGeneratedJsonFiles(project)
+                }
+            }
             //compileDebugJavaWithJavac
             project.tasks.findAll { task ->
                 task.name.startsWith('compile') && task.name.endsWith('JavaWithJavac')
@@ -72,6 +76,13 @@ class RouterPlugin implements Plugin<Project> {
                 }
             }
 
+        }
+    }
+
+    private static void deleteGeneratedJsonFiles(Project project) {
+        File routerMappingDir = new File(project.rootProject.projectDir, "router_mapping")
+        if (routerMappingDir.exists()) {
+            routerMappingDir.deleteDir()
         }
     }
 }
