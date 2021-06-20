@@ -24,12 +24,57 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            keyAlias 'test'
+            keyPassword '123456'
+            storeFile file('../../../test.key')
+            storePassword '123456'
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions('size', 'material')
+
+    productFlavors {
+
+        small {
+            dimension = 'size'
+        }
+
+        big {
+            dimension = 'size'
+        }
+
+        egg {
+            dimension = 'material'
+        }
+
+        beef {
+            dimension = 'material'
+        }
+
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            if (variant.buildType.name == 'release') {
+                def fileName = "RouterDemo_" +
+                        "${variant.productFlavors[0].name}_${variant.productFlavors[1].name}_" +
+                        "${defaultConfig.versionName}.apk"
+                output.outputFileName = fileName
+            }
+        }
+    }
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -51,7 +96,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation project(':router-annotations')
-    kapt (project(':router-processor'))
+    kapt(project(':router-processor'))
     implementation project(':biz-reading')
     implementation project(':router-runtime')
 }
