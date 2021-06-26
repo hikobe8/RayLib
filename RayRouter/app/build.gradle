@@ -24,8 +24,18 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file('./keystore')
+            storePassword '123456'
+            keyAlias 'key'
+            keyPassword '123456'
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -51,7 +61,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation project(':router-annotations')
-    kapt (project(':router-processor'))
+    kapt(project(':router-processor'))
     implementation project(':biz-reading')
     implementation project(':router-runtime')
 }
