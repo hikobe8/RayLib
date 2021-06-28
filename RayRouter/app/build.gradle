@@ -16,10 +16,10 @@ android {
 
     defaultConfig {
         applicationId "com.ray.rayrouter"
-        minSdkVersion 16
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion versions.minSdkVersion as int
+        targetSdkVersion versions.minSdkVersion as int
+        versionCode versions.versionCode as int
+        versionName versions.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -34,7 +34,17 @@ android {
     }
 
     buildTypes {
+
+        debug {
+            buildConfigField("String", "BUILD_TIME", "\"${System.currentTimeMillis()}\"")
+            resValue("string", "hello", "hello")
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
         release {
+            buildConfigField("String", "BUILD_TIME", "\"${System.currentTimeMillis()}\"")
+            resValue("string", "hello", "hello")
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -100,3 +110,8 @@ dependencies {
     implementation project(':biz-reading')
     implementation project(':router-runtime')
 }
+
+Properties properties = new Properties()
+properties.load(rootProject.file('local.properties').newDataInputStream())
+println("test userName = ${properties.get('userName')}")
+println("test userPassword = ${properties.get('userPassword')}")
