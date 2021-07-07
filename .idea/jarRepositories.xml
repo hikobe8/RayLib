@@ -36,5 +36,45 @@
       <option name="name" value="maven" />
       <option name="url" value="file:$PROJECT_DIR$/RayRouter/repo/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:/$PROJECT_DIR$/Users/rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:/$PROJECT_DIR$/JavaUtil/Users/rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:/$PROJECT_DIR$/rayimageloader/Users/rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:/$PROJECT_DIR$/retrofitnetwork/Users/rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:/$PROJECT_DIR$/lib/Users/rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:/$PROJECT_DIR$/app/Users/rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenLocal" />
+      <option name="name" value="MavenLocal" />
+      <option name="url" value="file:/$USER_HOME$/.m2/repository/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:/$PROJECT_DIR$/learnaspectj/Users/rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
+    </remote-repository>
   </component>
 </project>

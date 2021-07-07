@@ -28,4 +28,12 @@
         android:layout_width="200dp"
         android:layout_height="200dp"/>
 
+    <Button
+        android:text="亮度测试"
+        android:onClick="brightnessTest"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>
