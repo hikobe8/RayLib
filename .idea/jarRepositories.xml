@@ -81,5 +81,15 @@
       <option name="name" value="maven" />
       <option name="url" value="file:$PROJECT_DIR$/../../../../rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:/$PROJECT_DIR$/recyclerviewdecoration/Users/rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:/$PROJECT_DIR$/roomwithview/Users/rayyu/AndroidStudioProjects/RayLib/RayRouter/repo" />
+    </remote-repository>
   </component>
 </project>
