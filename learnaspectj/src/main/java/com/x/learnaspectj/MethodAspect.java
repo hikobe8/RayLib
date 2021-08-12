@@ -36,5 +36,7 @@ public class MethodAspect {
         Log.e(TAG, "点击事件埋点" + joinPoint.getTarget().toString()); //④
     }
 
+
+
 }
 

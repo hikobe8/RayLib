@@ -1,9 +1,14 @@
 package com.ray.raylib
 
+import android.content.ContentResolver
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.provider.Settings
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import com.ray.lib.device.brightness.BrightnessUtil
 import com.ray.lib.loading.LoadingViewManager
 import com.ray.rayimageloader.ImageLoader
 import com.ray.retrofitnetwork.HttpRequest
@@ -39,4 +44,24 @@ class MainActivity : AppCompatActivity() {
         ImageLoader.displayImage("https://img.iplaysoft.com/wp-content/uploads/2019/free-images/free_stock_photo_2x.jpg!0x0.webp",
                 findViewById(R.id.iv))
     }
+
+    /***
+     *  设置亮度在五秒之内从0到100
+     */
+    fun changeBrightness(){
+
+    }
+
+    fun brightnessTest(view: View) {
+        BrightnessUtil.allowModifySettings(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        BrightnessUtil.onActivityResult(this, requestCode, resultCode, data)
+    }
+
 }
+
+
+
