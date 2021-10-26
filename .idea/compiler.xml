@@ -5,6 +5,7 @@
       <module name="RayLib.app" target="1.8" />
       <module name="RayLib.learnaspectj" target="1.8" />
       <module name="RayLib.lib" target="1.8" />
+      <module name="RayLib.performance" target="1.8" />
       <module name="RayLib.rayimageloader" target="1.8" />
       <module name="RayLib.recyclerviewdecoration" target="1.8" />
       <module name="RayLib.retrofitnetwork" target="1.8" />

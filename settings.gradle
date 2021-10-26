@@ -28,3 +28,4 @@ gradle.addBuildListener(new BuildAdapter(){
     }
 
 })
+include ':performance'

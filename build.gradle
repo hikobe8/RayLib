@@ -12,7 +12,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
         classpath 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:2.0.10'
 //        classpath 'com.ray.router:router-gradle-plugin:1.0.0'
 
